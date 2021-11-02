@@ -105,8 +105,16 @@ export class PaneInput implements Pane {
       for (let i=0 ; i<ev.results.length ; i++) {
         phrase += ev.results[i][0].transcript
       }
-      phrase += T.t('.', 'Input')
+
+      // Voice recognition often lacks sentence-ending punctuation.
+      const endSentence = T.t('.', 'Input')
+      if (endSentence.length > 0 && phrase.endsWith(endSentence) !== true) {
+        phrase += endSentence
+      }
+
+      // set the result
       this.addWord(phrase)
+      this.onInput(this.input1Vjs.value)
       this.setGuiAsTyping()
     }
 
@@ -123,6 +131,8 @@ export class PaneInput implements Pane {
 
   private addWord(message:string) {
     this.input1Vjs.value += message
+    // go to the end of text
+    this.input1Vjs.setSelectionRange(this.input1Vjs.value.length, this.input1Vjs.value.length)
   }
 
   private setGuiAsSpeechRecognising() {
