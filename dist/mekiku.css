@@ -280,7 +280,7 @@ label {
   padding-bottom: 0.2em; /* to show underline used by IMEs */
 }
 #input-by-voice {
-  width: 1.3em;
+  width: 1.5em;
 }
 .noshow {
   display: none;
