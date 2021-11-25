@@ -132,7 +132,10 @@ export class PaneInput implements Pane {
   private addWord(message:string) {
     this.input1Vjs.value += message
     // go to the end of text
-    this.input1Vjs.setSelectionRange(this.input1Vjs.value.length, this.input1Vjs.value.length)
+    const len = this.input1Vjs.value.length
+    this.input1Vjs.blur() // workaround for Chromium (setSelectionRange doesn't textarea's scrollTop)
+    this.input1Vjs.setSelectionRange(len, len)
+    this.input1Vjs.focus()
   }
 
   private setGuiAsSpeechRecognising() {
