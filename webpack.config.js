@@ -25,6 +25,10 @@ const renderer = (env,argv) => ({
       ],
     }]
   },
+  performance: {
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000,
+  },
   devServer: {
     host: '0.0.0.0',
     port: 8008,
