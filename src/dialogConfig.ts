@@ -2,11 +2,14 @@ import { T } from "./t";
 import { AppConfig } from "./appConfig";
 import { UtilDom } from "./utilDom";
 import Log from "./log";
+import { Util } from "./util";
+import TmpConfig from "./TmpConfig";
 
 export class DialogConfig {
   private readonly container = document.getElementById('config-container') as HTMLDivElement
   private readonly pane = document.getElementById("config") as HTMLDivElement;
   private readonly buttonReset = document.getElementById('config-reset') as HTMLButtonElement
+  private readonly buttonCopyUri = document.getElementById('config-copy-uri') as HTMLButtonElement
   private readonly buttonOK = document.getElementById('config-button-ok') as HTMLButtonElement
   private readonly buttonCancel = document.getElementById('config-button-cancel') as HTMLButtonElement
 
@@ -19,6 +22,9 @@ export class DialogConfig {
     this.buttonReset.addEventListener('click', ev => {
       this.onResetClicked()
     })
+    this.buttonCopyUri.addEventListener('click', ev => {
+      this.copyURI()
+    })
     this.buttonOK.addEventListener('click', ev => {
       this.dialogToConfig()
       this.hideDialog()
@@ -28,6 +34,15 @@ export class DialogConfig {
       this.hideDialog()
     })
   } // end of constructor
+
+  private copyURI() {
+    const encodedPass = encodeURIComponent(TmpConfig.getPassword())
+    const encodedRoom = encodeURIComponent(TmpConfig.getRoomName())
+    const uri = Util.beforeOf(location.href, '?') + `?p=${encodedPass}&${encodedRoom}`
+    navigator.clipboard.writeText(uri).then().catch(
+      (reason) => alert(T.t('Can not copy URI.', 'General') + " : " + reason)
+    )
+  }
 
   private setTitle(title:string) {
     // nop

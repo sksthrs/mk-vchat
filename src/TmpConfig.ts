@@ -17,6 +17,24 @@ class TmpConfig {
     }
   }
 
+  // room name
+  private static roomName:string = ''
+  static getRoomName() : string {
+    return this.roomName
+  }
+  static setRoomName(name:string) {
+    this.roomName = name
+  }
+
+  // password
+  private static password:string = ''
+  static getPassword() : string {
+    return this.password
+  }
+  static setPassword(pass:string) {
+    this.password = pass
+  }
+
   // chat type
   static readonly SET_NAME_AUTOMATICALLY = 'a'
   private static chatType:string = '';

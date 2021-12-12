@@ -39,7 +39,6 @@ class App {
   private dialogConfig: DialogConfig
   private loginInfo?: LoginInfo
   private id: string = ""
-  private roomName: string = ""
   private panes: { [ch:string] : Pane; };
   private pageTitle:string = ""
   private splitContainer?: Split.Instance
@@ -87,10 +86,16 @@ class App {
     this.dialogLogin = new DialogLogin()
     this.setLoginDialogEvents()
     this.dialogLogin.setName(TmpConfig.getName())
-    const roomNameRaw = Util.beforeOf(UtilDom.getQuery() , '/')
+    const roomNameCandidate = Util.tryGetRoomNameFromURI()
+    const roomNameRaw = Util.beforeOf(roomNameCandidate , '/')
     if (Util.isRoomNameLegit(roomNameRaw)) {
       this.dialogLogin.setRoom(roomNameRaw)
       this.dialogLogin.hideRoom()
+    }
+    const passwordCandidate = Util.tryGetPasswordFromURI()
+    if (passwordCandidate != null) {
+      this.dialogLogin.setPassword(passwordCandidate)
+      this.dialogLogin.hidePass()
     }
     this.updatePageTitle(T.t("Login","Login"))
     // Cannot support old browsers (MSIE=IE(<11), Trident=IE11, Edge=EdgeHTML). Chromium Edge('Edg') is okay.
@@ -171,8 +176,11 @@ class App {
   // ==================== Misc ====================
 
   private updateRoomName(room:string) {
-    this.roomName = room
-    UtilDom.setQuery(room)
+    TmpConfig.setRoomName(room)
+    const roomNameInURI = Util.tryGetRoomNameFromURI()
+    if (roomNameInURI != room) {
+      UtilDom.setQuery(room)
+    }
     if (room.length > 0) {
       this.updatePageTitle(T.t("Room","General") + " " + room)
     } else {
@@ -239,27 +247,29 @@ class App {
 
     this.dialogLogin.onLoginClick = info => {
       this.loginInfo = info
-      if (info.room.length < 1) {
-        info.room = location.hash
-      }
+      TmpConfig.setRoomName(info.room)
       TmpConfig.setName(info.name)
+      TmpConfig.setPassword(info.pass)
       let login_info = info
+      this.updateRoomName(info.room)
+      this.paneMonitor.clearMembers()
+      this.paneMain.goBottom()
+      this.paneInput.clearAllInput()
+      this.setSubtitlerStyle()
       this.comm.open(
         TmpConfig.getApiKey(),
         {
           handleOpen: id => {
             this.comm.joinRoom(login_info, TmpConfig.getRoomConnectionType())
             .then(() => {})
-            .catch(error => {})
+            .catch(error => {
+              Log.w("Error", `Error on login. message:${error}`)
+              this.dialogLogin.showDialog()
+            })
           },
           debugLevel: TmpConfig.getDebugLevel()
         }
       )
-      this.updateRoomName(info.room)
-      this.paneMonitor.clearMembers()
-      this.paneMain.goBottom()
-      this.paneInput.clearAllInput()
-      this.setSubtitlerStyle()
     }
   }
 
@@ -402,9 +412,10 @@ class App {
     if (this.dialogLogin == null) return
     if (this.isErrorHandling) return // avoid during communication-error dialog appearing (after close it, this method is called)
     if (this.dialogLogin.isShown()) return // already shown
-    this.dialogLogin.setRoom(this.roomName)
+    this.dialogLogin.setRoom(TmpConfig.getRoomName())
     this.dialogLogin.setName(TmpConfig.getName())
-    this.updateRoomName('')
+    this.dialogLogin.setPassword(TmpConfig.getPassword())
+    this.updateRoomName(TmpConfig.getRoomName())
     this.paneMonitor.clearMembers()
     const hasMain = this.paneMain.hasMainLog()
     const hasNote = this.paneNote.hasNote()

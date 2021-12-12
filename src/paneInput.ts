@@ -68,7 +68,7 @@ export class PaneInput implements Pane {
       this.voiceButton.disabled = true
       UtilDom.hide(this.voiceButton)
     } else {
-      Log.w('info', `SpeechRecognition lang=${this.recognizer.lang}`)
+      Log.w('info', `SpeechRecognition lang=${this.recognizer.lang} navigator.lang=${navigator.language} langs=[${navigator.languages}]`)
       this.setupRecognizer()
     }
   } // end of constructor

@@ -1,3 +1,5 @@
+import { UtilDom } from "./utilDom"
+
 export class Util {
   /**
    * Extract string 'before delimiter' or whole if delimiter is not included.
@@ -22,6 +24,26 @@ export class Util {
   static isRoomNameLegit(name:string) : boolean {
     const re = /^[A-Za-z0-9]+$/
     return re.test(name)
+  }
+
+  /**
+   * Get room name, decoded, from URI (1.from query string , 2.from hash)
+   * @returns room name if possible, empty string if no information is provided
+   */
+  static tryGetRoomNameFromURI() : string {
+    const queries = UtilDom.getQuery()
+    const room = queries.reverse().find(tuple => tuple[1] === '')?.[0] ?? location.hash
+    return decodeURIComponent(room)
+  }
+
+  /**
+   * Get password, decoded, from URI (query string 'p=')
+   * @returns password if possible, undefined if no information is provided
+   */
+  static tryGetPasswordFromURI() : string | undefined {
+    const queries = UtilDom.getQuery()
+    const pass = queries.find(tuple => tuple[0].toLowerCase() === 'p')?.[1]
+    return pass == null ? pass : decodeURIComponent(pass) 
   }
 
   /**

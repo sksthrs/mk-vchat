@@ -90,6 +90,10 @@ class DialogLogin {
     this.nameInput.value = name
   }
 
+  setPassword(pass:string) {
+    this.passInput.value = pass
+  }
+
   showDialog(canGetMain:boolean=false, canGetNote:boolean=false) {
     if (canGetMain === true) {
       UtilDom.displayOn(this.buttonDownload)

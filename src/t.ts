@@ -215,6 +215,7 @@ export class T {
         "Internet Explorer and old version of Microsoft Edge are not supported." : "Internet Explorerおよび旧版のMicrosoft Edgeでは利用できません。",
         "Note" : "メモ表示",
         "Chat" : "チャット表示",
+        "Can not copy URI." : "URLをコピーできませんでした。",
       },
       "Input" : {
         "Input Window" : "入力ウインドウ",
@@ -318,6 +319,7 @@ export class T {
         "Save chat log" : "連絡窓のログを保存する",
         "Startup Settings" : "起動時設定",
         "Keep Last Settings" : "前回終了時の設定を初期設定にする",
+        "Copy URL of this room including password" : "このルームのパスワードを含めたURLをコピー",
       },
       "Config|Main" : {
         "Main Display" : "メイン表示部",
@@ -398,6 +400,7 @@ export class T {
         // "Internet Explorer and old version of Microsoft Edge are not supported." : "",
         //"Note" : "",
         //"Back" : "",
+        //"Can not copy URL." : "",
       },
       "Input" : {
         "Input Window" : "หน้าต่างอินพุท",
@@ -499,6 +502,7 @@ export class T {
         "Save chat log" : "บันทึก (ล็อกหน้าต่างแช็ท)",
         "Startup Settings" : "ตั้งค่าเริ่มต้น",
         "Keep Last Settings" : "ตั้งเป็นค่าล่าสุด",
+        // "Copy URL of this room including password" : "",
       },
       "Config|Main" : {
         "Main Display" : "จอแสดงผลหลัก",

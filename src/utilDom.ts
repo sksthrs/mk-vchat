@@ -2,15 +2,26 @@ import { Util } from "./util"
 
 export class UtilDom {
   /**
-   * Get query string without leading '?'
-   * @returns query string if exists, or '' if query string does not exist
+   * Get query string as an array of tuples (key,value) without leading '?'
+   * Elements in tuples are decoded.
+   * @returns array of tuples in query string if exists, or empty array if query string does not exist
    */
-  static getQuery() : string {
+  static getQuery() : Array<[string,string]> {
     const q = location.search
     if (q.length > 0 && q[0] === '?') {
-      return q.substring(1)
+      const result:Array<[string,string]> = []
+      for(const query of q.substring(1).split('&')) {
+        if (query.length < 1) continue
+        const tokens = query.split('=')
+        if (tokens.length <= 1) {
+          result.push([decodeURIComponent(query),''])
+        } else {
+          result.push([decodeURIComponent(tokens[0]), decodeURIComponent(tokens[1])])
+        }
+      }
+      return result
     }
-    return ''
+    return []
   }
 
   /**
@@ -18,7 +29,7 @@ export class UtilDom {
    * @param query query string without leading '?'
    */
   static setQuery(query:string) {
-    history.replaceState({}, '', '?'+query)
+    history.replaceState({}, '', '?' + encodeURIComponent(query))
   }
 
   static getWidth(el: HTMLElement): number {

@@ -7,7 +7,7 @@
   <meta property="og:title" content="mk-vchat">
   <meta property="og:description" content="音声入力、入力状況モニターおよびノート欄つきチャット (chat with voice-input, input-monitoring, note)">
   <meta property="og:image" content="apple-touch-icon.png">
-  <link href="mekiku.css" rel="stylesheet">
+  <link href="mekiku.css?20211212" rel="stylesheet">
   <link rel="icon" href="favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <title>mk-vchat</title>
@@ -20,8 +20,8 @@
       <div id="display-input">
         <div id="controlOnChat" class="pane">
           <button id="appShowNoteOnChat" class="l10n" data-context="General">Note</button>
-          <button id="appConfigOnChat" class="l10n" data-context="Config">Config</button>
-          <button id="appLogoutOnChat" class="l10n" data-context="Login">Logout</button>
+          <button id="appConfigOnChat" class="l10n button-config" data-context="Config">Config</button>
+          <button id="appLogoutOnChat" class="l10n button-logout" data-context="Login">Logout</button>
         </div>
         <div id="member-list"></div>
         <div id="display" class="pane"></div>
@@ -61,8 +61,8 @@
 
       <div id="control" class="pane">
         <button id="appBackToChat" class="l10n" data-context="General">Chat</button>
-        <button id="appConfig" class="l10n" data-context="Config">Config</button>
-        <button id="appLogout" class="l10n" data-context="Login">Logout</button>
+        <button id="appConfig" class="l10n button-config" data-context="Config">Config</button>
+        <button id="appLogout" class="l10n button-logout" data-context="Login">Logout</button>
         <a id="file-download" download href="data:,hello" class="no-show"></a>
       </div>
       <div id="note" class="pane">
@@ -109,7 +109,7 @@
   <div id="login" class="dialog open"><div id="login-contents" class="dialog_content big_font">
     <div id="app-title" class="title">
       <span id="login-title" class="l10n" data-context="General">mk-Chat with Voice</span>
-      <span id="app-version">beta-16</span>
+      <span id="app-version">beta-17</span>
     </div>
     <table id="loginTable"><tbody>
       <tr id="loginTable_roomRow">
@@ -159,6 +159,9 @@
     </div>
     <div class="config-singleline">
       <button id="config-reset" class="l10n" data-context="Menu|Menu">Reset All Settings</button>
+    </div>
+    <div class="config-singleline">
+      <button id="config-copy-uri" class="l10n" data-context="Config|Misc">Copy URL of this room including password</button>
     </div>
     <div id="config-button-pane" class="single_column">
       <button id="config-button-ok" class="l10n submit" data-context="General">OK</button>
