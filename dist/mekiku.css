@@ -36,6 +36,10 @@ label {
   cursor: pointer;
 }
 
+button {
+  border-radius: 0.1em; /* avoid iOS style (too round) */
+}
+
 /* ==================== Generic Classes ==================== */
 
 .titlebar {
@@ -183,6 +187,18 @@ label {
 
   display: flex;
   flex-direction: row;
+}
+
+.button-config {
+  background-color: #00ff00;
+  color: black;
+  font-weight: bold;
+}
+
+.button-logout {
+  background-color: #ffff00;
+  color: black;
+  font-weight: bold;
 }
 
 .toolbar {
