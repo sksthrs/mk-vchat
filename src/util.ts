@@ -162,6 +162,14 @@ export class Util {
   }
 
   /**
+   * Detect if accessing browser is running on iOS.
+   */
+   static isIOS() : boolean {
+    const platform = window.navigator.platform.toLowerCase()
+    return platform.includes('iphone') || platform.includes('ipad') || platform.includes('ipod')
+  }
+
+  /**
    * Detect if accessing browser is running on iPhone.
    * (Reason) Safari on iPhone implements SpeechRecognition so badly, we need to detect.
    */

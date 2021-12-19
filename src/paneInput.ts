@@ -231,10 +231,13 @@ export class PaneInput implements Pane {
   }
 
   private configToScreen() {
-    this.input1Vjs.style.fontSize = AppConfig.data.main_font_size + 'pt'
-    this.voiceButton.style.fontSize = AppConfig.data.main_font_size + 'pt'
-    this.sendButton.style.fontSize = Math.floor(AppConfig.data.main_font_size * 0.7) + 'pt'
-    this.warningMessage.style.fontSize = Math.floor(AppConfig.data.main_font_size * 0.5) + 'pt'
+    const fontSizePt = (Util.isIOS()) 
+      ? Math.max(AppConfig.data.main_font_size, 12) 
+      : AppConfig.data.main_font_size
+    this.input1Vjs.style.fontSize = fontSizePt + 'pt'
+    this.voiceButton.style.fontSize = fontSizePt + 'pt'
+    this.sendButton.style.fontSize = Math.floor(fontSizePt * 0.7) + 'pt'
+    this.warningMessage.style.fontSize = Math.floor(fontSizePt * 0.5) + 'pt'
   }
 
   isVoiceInputAvailable() : boolean {
