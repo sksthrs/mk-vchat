@@ -21,6 +21,7 @@ export class PaneInput implements Pane {
 
   private readonly recognizer: any // SpeechRecognition ; this class is not recognized.
   private isSpeechRecognising = false
+  private isSpeechRecognitionAvailable = true
 
   private getFkey: (ix:number) => string = (ix) => { return "" }
   setGetFkey(callback: (ix:number) => string) { this.getFkey = (ix) => callback(ix) }
@@ -64,9 +65,8 @@ export class PaneInput implements Pane {
       ('SpeechRecognition' in window) ? new (window as any).SpeechRecognition()
       : ('webkitSpeechRecognition' in window) ? new (window as any).webkitSpeechRecognition()
       : null
-    if (this.recognizer == null) {
-      this.voiceButton.disabled = true
-      UtilDom.hide(this.voiceButton)
+    if (this.recognizer == null || Util.isLine()) {
+      this.hideVoiceUIs()
     } else {
       Log.w('info', `SpeechRecognition lang=${this.recognizer.lang} navigator.lang=${navigator.language} langs=[${navigator.languages}]`)
       this.setupRecognizer()
@@ -235,6 +235,16 @@ export class PaneInput implements Pane {
     this.voiceButton.style.fontSize = AppConfig.data.main_font_size + 'pt'
     this.sendButton.style.fontSize = Math.floor(AppConfig.data.main_font_size * 0.7) + 'pt'
     this.warningMessage.style.fontSize = Math.floor(AppConfig.data.main_font_size * 0.5) + 'pt'
+  }
+
+  isVoiceInputAvailable() : boolean {
+    return this.isSpeechRecognitionAvailable
+  }
+
+  private hideVoiceUIs() {
+    this.isSpeechRecognitionAvailable = false
+    this.voiceButton.disabled = true
+    UtilDom.displayOff(this.voiceButton)
   }
 
   setPaneToConfig() {

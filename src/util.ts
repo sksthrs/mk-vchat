@@ -162,6 +162,31 @@ export class Util {
   }
 
   /**
+   * Detect if accessing browser is running on iPhone.
+   * (Reason) Safari on iPhone implements SpeechRecognition so badly, we need to detect.
+   */
+   static isIPhone() : boolean {
+    const platform = window.navigator.platform.toLowerCase()
+    return platform.includes('iphone') // || platform.includes('ipod') // I do not have an iPod.
+  }
+
+  /**
+   * Detect if accessing browser is running on iPad.
+   * (Reason) SpeechRecognition is available only on Safari.
+   */
+  static isIPad() : boolean {
+    const platform = window.navigator.platform.toLowerCase()
+    return platform.includes('ipad')
+  }
+
+  /**
+   * Detect if accessing browser is inner browser of LINE(messaging app).
+   */
+  static isLine() : boolean {
+    return navigator.userAgent.toLowerCase().includes(' line')
+  }
+
+  /**
    * provide shortcut-description string (ex. "Ctrl+S").
    * on macOS, "Cmd" is used instead of "Ctrl".
    * [notice] return value starts with space (u0020) because most usage need it.

@@ -216,6 +216,10 @@ export class T {
         "Note" : "メモ表示",
         "Chat" : "チャット表示",
         "Can not copy URI." : "URLをコピーできませんでした。",
+        "You cannot use Voice Input on this browser." : "このブラウザでは音声入力は使用できません。",
+        "Voice Input is available on Chrome." : "Chromeブラウザなら音声入力が使えます。",
+        "Voice Input is available on Safari." : "Safariブラウザなら音声入力が使えます。",
+        "iPhone's own voice input is recommended." : "iPhone自身の音声入力機能をお勧めします。",
       },
       "Input" : {
         "Input Window" : "入力ウインドウ",
@@ -401,6 +405,10 @@ export class T {
         //"Note" : "",
         //"Back" : "",
         //"Can not copy URL." : "",
+        //"You cannot use Voice Input on this browser." : "",
+        //"Voice Input is availabel on Chrome." : "",
+        //"Voice Input is availabel on Safari." : "",
+        //"iPhone's own voice input is recommended." : "",
       },
       "Input" : {
         "Input Window" : "หน้าต่างอินพุท",
