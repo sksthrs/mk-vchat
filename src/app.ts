@@ -270,20 +270,11 @@ class App {
           debugLevel: TmpConfig.getDebugLevel()
         }
       )
-      if (this.paneInput.isVoiceInputAvailable() !== true || Util.isIPhone())
+      if (this.paneInput.isVoiceInputAvailable() !== true)
       {
-        this.alertAndRecommendBrowser()
+        this.paneInput.alertAndRecommendBrowser()
       }
     }
-  }
-
-  private alertAndRecommendBrowser() {
-    const recommend = 
-      (Util.isIPhone()) ? T.t("iPhone's own voice input is recommended.",'General') :
-      (Util.isIPad()) ? T.t('Voice Input is available on Safari.', 'General') :
-      T.t('Voice Input is available on Chrome.','General')
-    const message = T.t('You cannot use Voice Input on this browser.', 'General')
-    window.alert(message + '\n\n' + recommend)
   }
 
   private setInputEvents() {

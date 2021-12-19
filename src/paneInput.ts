@@ -75,7 +75,7 @@ export class PaneInput implements Pane {
     }
   } // end of constructor
 
-  private alertAndRecommendBrowser() {
+  alertAndRecommendBrowser() {
     const recommend = 
       (Util.isIPhone()) ? T.t("iPhone's own voice input is recommended.",'General') :
       (Util.isIPad()) ? T.t('Voice Input is available on Safari.', 'General') :
@@ -112,7 +112,9 @@ export class PaneInput implements Pane {
     this.recognizer.onerror = (ev:any) => {
       Log.w('error', `Speech recognition error : ${ev.error}`)
       this.setGuiAsTyping()
-      this.showWarning(T.t('Error in speech recognition', 'Input'))
+      if (this.recognizer.isAvailable()) {
+        this.showWarning(T.t('Error in speech recognition', 'Input'))
+      }
     }
     
     // the type of ev should be SpeechRecognitionEventInit
@@ -120,6 +122,17 @@ export class PaneInput implements Pane {
       let phrase = ''
       for (let i=0 ; i<ev.results.length ; i++) {
         phrase += ev.results[i][0].transcript
+      }
+
+      // [for iPhone] SpeechRecognition on iPhone sometimes duplicate same phrase twice.
+      if (Util.isIPhone()) {
+        if ((phrase.length & 1) == 0) {
+          const half1st = phrase.substring(0, phrase.length/2)
+          const half2nd = phrase.substring(phrase.length/2)
+          if (half1st === half2nd) {
+            phrase = half1st
+          }
+        }
       }
 
       // Voice recognition often lacks sentence-ending punctuation.
