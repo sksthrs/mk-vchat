@@ -5,6 +5,7 @@ import { T } from "./t"
 import { Util } from "./util"
 import TmpConfig from "./TmpConfig"
 import Log from "./log"
+import { SpeechRecognitionWrap } from "./speechRecognitionWrap"
 
 export class PaneInput implements Pane {
   getName() { return "PaneInput" }
@@ -19,7 +20,7 @@ export class PaneInput implements Pane {
   private readonly warningMessage = document.getElementById('warning-in-input-message') as HTMLSpanElement
   private readonly warningHide = document.getElementById('warning-in-input-hide') as HTMLButtonElement
 
-  private readonly recognizer: any // SpeechRecognition ; this class is not recognized.
+  private readonly recognizer: SpeechRecognitionWrap // SpeechRecognition ; this class is not recognized.
   private isSpeechRecognising = false
   private isSpeechRecognitionAvailable = true
 
@@ -61,11 +62,12 @@ export class PaneInput implements Pane {
     this.configToScreen()
 
     // SpeechRecognition and webkitSpeechRecognition are not recognized.
-    this.recognizer = 
-      ('SpeechRecognition' in window) ? new (window as any).SpeechRecognition()
-      : ('webkitSpeechRecognition' in window) ? new (window as any).webkitSpeechRecognition()
-      : null
-    if (this.recognizer == null || Util.isLine()) {
+    // this.recognizer = 
+    //   ('SpeechRecognition' in window) ? new (window as any).SpeechRecognition()
+    //   : ('webkitSpeechRecognition' in window) ? new (window as any).webkitSpeechRecognition()
+    //   : null
+    this.recognizer = new SpeechRecognitionWrap()
+    if (this.recognizer == null || this.recognizer.isAvailable() !== true || Util.isLine()) {
       this.hideVoiceUIs()
     } else {
       Log.w('info', `SpeechRecognition lang=${this.recognizer.lang} navigator.lang=${navigator.language} langs=[${navigator.languages}]`)
@@ -73,7 +75,21 @@ export class PaneInput implements Pane {
     }
   } // end of constructor
 
+  private alertAndRecommendBrowser() {
+    const recommend = 
+      (Util.isIPhone()) ? T.t("iPhone's own voice input is recommended.",'General') :
+      (Util.isIPad()) ? T.t('Voice Input is available on Safari.', 'General') :
+      T.t('Voice Input is available on Chrome.','General')
+    const message = T.t('You cannot use Voice Input on this browser.', 'General')
+    window.alert(message + '\n\n' + recommend)
+  }
+
   private setupRecognizer() {
+    this.recognizer.ondetectunavailable = () => {
+      this.hideVoiceUIs()
+      this.alertAndRecommendBrowser()
+    }
+
     this.recognizer.continuous = false
     this.recognizer.interimResults = false
 
