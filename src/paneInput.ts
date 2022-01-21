@@ -86,6 +86,7 @@ export class PaneInput implements Pane {
 
   private setupRecognizer() {
     this.recognizer.ondetectunavailable = () => {
+      Log.w('error', 'Speech recognition : fatal error. seems unavailable.')
       this.hideVoiceUIs()
       this.alertAndRecommendBrowser()
     }

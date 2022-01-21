@@ -82,6 +82,10 @@ export class SpeechRecognitionWrap {
   ondetectunavailable: () => void = () => {}
 
   constructor() {
+    this.generateRecognizer()
+  }
+
+  private generateRecognizer() {
     this.recognizer = 
       ('SpeechRecognition' in window) ? new (window as any).SpeechRecognition()
       : ('webkitSpeechRecognition' in window) ? new (window as any).webkitSpeechRecognition()
@@ -138,11 +142,13 @@ export class SpeechRecognitionWrap {
         this.recognizer.abort()
       }
     }
-    this.recognizer.onerror = (ev:any) => {
+    this.recognizer.onerror = (ev: any) => {
+      this.recognizer.abort()
+      this.recognizer = null
       if (this.recognizerState === SpeechRecognitionStatus.Start) {
-        this.recognizer.abort()
-        this.recognizer = null // error on "just start" must be "SpeechRecognition is unavailable"
-        this.ondetectunavailable()
+        this.ondetectunavailable() // error on "just start" must be "SpeechRecognition is unavailable"
+      } else {
+        this.generateRecognizer() // re-generate on other errors
       }
       this.onerror(ev)
     }
