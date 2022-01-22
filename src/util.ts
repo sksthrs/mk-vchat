@@ -120,6 +120,27 @@ export class Util {
     return sum;
   }
 
+  /**
+   * get n-th item in an array. any n is accepted.
+   * count from last item when n is negative value.
+   * (example) assume ar = [1,2,3]
+   * getArrayItem(ar,0) === 1
+   * getArrayItem(ar,3) === getArrayItem(ar,99999) === 3 (large index is handled as last item)
+   * getArrayItem(ar,-1) === 3 (negative index means count from last item)
+   * getArrayItem(ar,-2) === 2
+   * getArrayItem(ar,-3) === getArrayItem(ar,-99999) === 1 (small index is handled as first item)
+   * @param array an array from where get a value
+   * @param n index
+   * @returns a value in the array or undefined (when the array is null or undefined)
+   */
+  static getArrayItem<T>(array:Array<T> | null | undefined, n:number) : T | undefined {
+    if (array == null) return undefined
+    const nElement = (n >= 0)
+      ? Math.min(n, array.length-1)
+      : Math.max(array.length + n,0)
+    return array[nElement]
+  }
+
   static toLf(src:string) : string {
     return src.replace(/\r\n?/g, "\n");
   }
@@ -192,6 +213,90 @@ export class Util {
    */
   static isLine() : boolean {
     return navigator.userAgent.toLowerCase().includes(' line')
+  }
+
+  static estimateOSAndBrowser() : string {
+    const os = this.estimateOS()
+    const browser = this.estimateBrowser()
+    return (browser == null || browser.length < 1) ? os : os + " - " + browser
+  }
+
+  static estimateOS() : string {
+    const ua = navigator.userAgent.toLowerCase()
+
+    // detect specific OS first
+    if (ua.includes('windows phone')) return 'Windows Phone'
+    if (ua.includes('iphone')) return 'iPhone'
+    if (ua.includes('ipad')) return 'iPad'
+    if (ua.includes('CrOS')) return 'ChromeOS'
+    if (ua.includes('appletv')) return 'AppleTV'
+    if (ua.includes('kindle')) return 'FireOS'
+    if (ua.includes('silk')) return 'FireOS'
+    if (ua.includes('aftb')) return 'FireTV'
+    if (ua.includes('nintendo')) return 'Nintendo'
+    if (ua.includes('playstation')) return 'PlayStation'
+    if (ua.includes('xbox')) return 'XBox'
+
+    // detect generic OS names (used also for specific OS)
+    if (ua.includes('mac os')) return 'macOS'
+    if (ua.includes('android')) return 'Android'
+    if (ua.includes('windows')) return 'Windows'
+    if (ua.includes('freebsd')) return 'FreeBSD'
+    if (ua.includes('linux')) return 'Linux'
+
+    // unidentifiable
+    return ''
+  }
+
+  static estimateBrowser() : string {
+    const ua = navigator.userAgent.toLowerCase()
+
+    // not necessary browser information for some OS
+    if (ua.includes('windows phone')) return ''
+    if (ua.includes('iphone')) return ''
+    if (ua.includes('ipad')) return ''
+    if (ua.includes('CrOS')) return ''
+    if (ua.includes('appletv')) return ''
+    if (ua.includes('kindle')) return ''
+    if (ua.includes('silk')) return ''
+    if (ua.includes('aftb')) return ''
+    if (ua.includes('nintendo')) return ''
+    if (ua.includes('playstation')) return ''
+    if (ua.includes('xbox')) return ''
+
+    // estimate browser (special cases)
+    if (ua.includes('samsung')) return 'Samsung'
+    if (ua.includes('ucbrowser')) return 'UC Browser'
+    if (ua.includes('qqbrowser')) return 'QQ Browser'
+    if (ua.includes('yabrowser')) return 'Yandex'
+    if (ua.includes('whale')) return 'Whale'
+    if (ua.includes('puffin')) return 'Puffin'
+    if (ua.includes('opr')) return 'Opera'
+    if (ua.includes('coc_coc')) return 'Cốc Cốc'
+    if (ua.includes('yahoo') || ua.includes('yjapp')) return 'Yahoo'
+    if (ua.includes('fban') || ua.includes('fbios')) return 'Facebook'
+    if (ua.includes('instagram')) return 'Instagram'
+    if (ua.includes('line')) return 'LINE'
+
+    // estimate browser (semi-special cases)
+    if (ua.includes('crios')) return 'Chrome(iOS)'
+    if (ua.includes('fxios')) return 'Firefox(iOS)'
+    if (ua.includes('cfnetwork')) return 'iOS app'
+    if (ua.includes('dalvik')) return 'Android app'
+    if (ua.includes('wv)')) return 'Android WebView'
+
+    // estimate browser (general cases)
+    if (ua.includes('trident') || ua.includes('msie')) return 'IE'
+    if (ua.includes('edge')) return 'Edge(old)'
+    if (ua.includes('edg')) return 'Edge'
+    if (ua.includes('firefox')) return 'Firefox'
+
+    // super-general names (order matters)
+    if (ua.includes('chrome')) return 'Chrome' // 'chrome' is included in most Browsers' userAgent
+    if (ua.includes('safari')) return 'Safari' // 'safari' is included in most Browsers' userAgent, includes Chrome
+
+    // unidentifiable
+    return ''
   }
 
   /**

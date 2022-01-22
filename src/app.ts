@@ -53,6 +53,8 @@ class App {
   private readonly MEDIA_QUERY_SMALL_SCREEN = 'screen and (max-width: 519px)'
 
   constructor() {
+    Log.w('info', `useragent:${navigator.userAgent} / estimate:${Util.estimateOSAndBrowser()}`)
+
     const localConfig = localStorage.getItem(this.KEY_STORAGE)
     if (localConfig != null) {
       Log.w('Info', 'config found in localStorage')
@@ -292,7 +294,9 @@ class App {
 
   private setMonitorEvents() {
     this.paneMonitor.setOnNewJoined(member => {
-      this.paneMain.addMessageMemberAttended(member.name ?? '???')
+      const name = member.name ?? '???'
+      let addInfo = Util.getArrayItem(member.additionalInfo?.split('\n'), 0)
+      this.paneMain.addMessageMemberAttended(`${name} (${addInfo})`)
     })
 
     this.paneMonitor.setOnLeft(member => {

@@ -5,6 +5,7 @@ import { T } from "./t";
 import { UtilDom } from "./utilDom";
 import { Content, ContentType } from "./content";
 import Log from "./log";
+import { Util } from "./util";
 
 export class PaneMonitor implements Pane {
   getName() { return "PaneMonitor"; }
@@ -39,6 +40,7 @@ export class PaneMonitor implements Pane {
     const result = MemberManager.data.update(member)
     let ix = result.v1
     if (ix < 0) {
+      Log.w('info', `new member [${member.name}] ${member.additionalInfo}`)
       this.addRow()
       this.updateMemberList()
       ix = MemberManager.data.getCount() - 1
@@ -111,7 +113,7 @@ export class PaneMonitor implements Pane {
     if (nameNode) { nameNode.data = nameStr; }
     
     const nameCell = row.cells[this.IX_NAME];
-    nameCell.title = member.id;
+    nameCell.title = Util.getArrayItem(member.additionalInfo?.split('\n'), 0) ?? '(unidentified)';
 
     const inputNode = row.cells[this.IX_INPUT].firstChild as Text;
     const inputStrBase = (member.inputContent === undefined) ? "" : member.inputContent;

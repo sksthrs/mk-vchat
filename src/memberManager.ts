@@ -6,6 +6,7 @@ import { ColorManager } from "./utilColor";
 export interface MemberInfo {
   id: string
   name?: string
+  additionalInfo?: string
   inputContent?: string
   lastReceived: number
   lastSequence: number
@@ -15,6 +16,7 @@ export interface MemberInfo {
 export class MemberInfoClass implements MemberInfo {
   id: string
   name?: string
+  additionalInfo?: string
   inputContent?: string
   lastReceived: number
   lastSequence: number
@@ -29,6 +31,10 @@ export class MemberInfoClass implements MemberInfo {
   static fromContent(data:Content) : MemberInfoClass {
     const d = new MemberInfoClass(data.senderID)
     d.name = data.senderName
+    d.additionalInfo =
+      (data.senderAdditionalInfo != null && data.senderAdditionalInfo.length > 0)
+        ? data.senderAdditionalInfo
+        : 'unidentified browser'
     d.lastReceived = data.sendTimeCount
     d.lastSequence = data.seqCount
     return d

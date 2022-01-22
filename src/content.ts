@@ -8,6 +8,8 @@ export interface ContentToSend {
   /** [set-by-sender] */
   senderName: string
   /** [set-by-sender] */
+  senderAdditionalInfo: string
+  /** [set-by-sender] */
   messageType: string
   /** [set-by-sender] */
   messageBody: string
@@ -17,6 +19,7 @@ export class ContentToSendClass implements ContentToSend {
   seqCount: number
   sendTimeCount: number
   senderName: string
+  senderAdditionalInfo: string
   messageType: string
   messageBody: string
 
@@ -24,6 +27,7 @@ export class ContentToSendClass implements ContentToSend {
     this.seqCount = ++ContentToSendClass.counter
     this.sendTimeCount = Date.now()
     this.senderName = name
+    this.senderAdditionalInfo = Util.estimateOSAndBrowser() + '\n' + navigator.userAgent
     this.messageType = type
     this.messageBody = message
   }
@@ -48,6 +52,7 @@ export class ContentClass implements Content {
   seqCount: number = 0
   sendTimeCount: number = 0
   senderName: string = ""
+  senderAdditionalInfo: string = ""
   messageType: string = ""
   messageBody: string = ""
   readonly receiveTimeCount: number
