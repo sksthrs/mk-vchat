@@ -1,3 +1,4 @@
+import { AppConfig } from "./appConfig"
 import { Util } from "./util"
 
 /**
@@ -93,6 +94,8 @@ export class SpeechRecognitionWrap {
     if (this.recognizer == null) {
       return
     }
+
+    this.recognizer.lang = AppConfig.data.getLocale()
 
     if (Util.isIPhone()) {
       this.recognizer.continuous = true // always true

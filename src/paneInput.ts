@@ -138,7 +138,8 @@ export class PaneInput implements Pane {
 
       // Voice recognition often lacks sentence-ending punctuation.
       const endSentence = T.t('.', 'Input')
-      if (endSentence.length > 0 && phrase.endsWith(endSentence) !== true) {
+      const reIfNotEndsWithPuncuation = /\P{P}$/u
+      if (reIfNotEndsWithPuncuation.test(phrase)) {
         phrase += endSentence
       }
 
