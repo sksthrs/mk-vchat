@@ -113,10 +113,17 @@ export class PaneInput implements Pane {
     this.recognizer.onerror = (ev:any) => {
       Log.w('error', `Speech recognition error : ${ev.error}`)
       this.setGuiAsTyping()
-      if (`${ev.error}`.toLowerCase() === 'no-speech') {
-        this.showWarning(T.t('Speech is not detected (Getting closer to your mic may help)', 'Input'))
-      } else if (this.recognizer.isAvailable()) {
-        this.showWarning(T.t('Error in speech recognition', 'Input'))
+      if (this.recognizer.isAvailable() !== true) return
+      switch (`${ev.error}`.toLowerCase()) {
+        case 'no-speech':
+          this.showWarning(T.t('Speech is not detected (Getting closer to your mic may help)', 'Input'))
+          break
+        case 'not-allowed':
+          this.showWarning(T.t('Maybe no mic detected', 'Input'))
+          break
+        default:
+          this.showWarning(T.t('Error in speech recognition', 'Input'))
+          break
       }
     }
     

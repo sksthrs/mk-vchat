@@ -226,6 +226,7 @@ export class T {
         "Type your message here, then hit enter." : "メッセージを入力して、Enterキーで送信",
         "Cannot recognize" : "認識できません",
         "Speech is not detected (Getting closer to your mic may help)" : "音声が入りませんでした（マイクに近づいてみてください）",
+        "Maybe no mic detected" : "マイクが認識されていないかも",
         "Error in speech recognition" : "音声認識エラーです",
         "." : "。",
       },
