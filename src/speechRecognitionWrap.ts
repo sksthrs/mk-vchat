@@ -9,6 +9,7 @@ import { Util } from "./util"
 export class SpeechRecognitionWrap {
   private recognizer: any // SpeechRecognition ; this class is not recognized.
   private recognizerState:number = SpeechRecognitionStatus.None
+  private recognizerStatePrev:number = SpeechRecognitionStatus.None
   /**
    * [for iPhone] SpeechRecognition.continuous must always be true. So this property hold intended flag.
    * To avoid iPhone's pitfalls, this class set continuous true always
@@ -102,34 +103,42 @@ export class SpeechRecognitionWrap {
     }
 
     this.recognizer.onstart = () => {
+      this.recognizerStatePrev = this.recognizerState
       this.recognizerState |= SpeechRecognitionStatus.Start
       this.onstart()
     }
     this.recognizer.onend = () => {
+      this.recognizerStatePrev = this.recognizerState
       this.recognizerState &= ~SpeechRecognitionStatus.Start
       this.onend()
     }
     this.recognizer.onaudiostart = () => {
+      this.recognizerStatePrev = this.recognizerState
       this.recognizerState |= SpeechRecognitionStatus.AudioStart
       this.onaudiostart()
     }
     this.recognizer.onaudioend = () => {
+      this.recognizerStatePrev = this.recognizerState
       this.recognizerState &= ~SpeechRecognitionStatus.AudioStart
       this.onaudioend()
     }
     this.recognizer.onsoundstart = () => {
+      this.recognizerStatePrev = this.recognizerState
       this.recognizerState |= SpeechRecognitionStatus.SoundStart
       this.onsoundstart()
     }
     this.recognizer.onsoundend = () => {
+      this.recognizerStatePrev = this.recognizerState
       this.recognizerState &= ~SpeechRecognitionStatus.SoundStart
       this.onsoundend()
     }
     this.recognizer.onspeechstart = () => {
+      this.recognizerStatePrev = this.recognizerState
       this.recognizerState |= SpeechRecognitionStatus.SpeechStart
       this.onspeechstart()
     }
     this.recognizer.onspeechend = () => {
+      this.recognizerStatePrev = this.recognizerState
       this.recognizerState &= ~SpeechRecognitionStatus.SpeechStart
       this.onspeechend()
     }
@@ -148,8 +157,9 @@ export class SpeechRecognitionWrap {
     this.recognizer.onerror = (ev: any) => {
       this.recognizer.abort()
       this.recognizer = null
-      if (this.recognizerState === SpeechRecognitionStatus.Start) {
-        this.ondetectunavailable() // error on "just start" must be "SpeechRecognition is unavailable"
+      if (this.recognizerState === SpeechRecognitionStatus.Start 
+        && `${ev.error}`.toLowerCase() === 'network') {
+        this.ondetectunavailable() // Vivaldi and Chromium : ev.error.toString() === 'network'
       } else {
         this.generateRecognizer() // re-generate on other errors
       }

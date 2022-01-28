@@ -94,14 +94,14 @@ export class PaneInput implements Pane {
     this.recognizer.continuous = false
     this.recognizer.interimResults = false
 
-    this.recognizer.onstart = () => {}
-    this.recognizer.onend = () => {}
-    this.recognizer.onaudiostart = () => {}
-    this.recognizer.onaudioend = () => {}
-    this.recognizer.onsoundstart = () => {}
-    this.recognizer.onsoundend = () => {}
-    this.recognizer.onspeechstart = () => {}
-    this.recognizer.onspeechend = () => {}
+    this.recognizer.onstart = () => { Log.w('info','onstart') }
+    this.recognizer.onend = () => { Log.w('info','onend') }
+    this.recognizer.onaudiostart = () => { Log.w('info','onaudiostart') }
+    this.recognizer.onaudioend = () => { Log.w('info','onaudioend') }
+    this.recognizer.onsoundstart = () => { Log.w('info','onsoundstart') }
+    this.recognizer.onsoundend = () => { Log.w('info','onsoundend') }
+    this.recognizer.onspeechstart = () => { Log.w('info','onspeechstart') }
+    this.recognizer.onspeechend = () => { Log.w('info','onspeechend') }
 
     this.recognizer.onnomatch = () => {
       Log.w('error', 'Speech recognition : no-match')
@@ -113,7 +113,9 @@ export class PaneInput implements Pane {
     this.recognizer.onerror = (ev:any) => {
       Log.w('error', `Speech recognition error : ${ev.error}`)
       this.setGuiAsTyping()
-      if (this.recognizer.isAvailable()) {
+      if (`${ev.error}`.toLowerCase() === 'no-speech') {
+        this.showWarning(T.t('Speech is not detected (Getting closer to your mic may help)', 'Input'))
+      } else if (this.recognizer.isAvailable()) {
         this.showWarning(T.t('Error in speech recognition', 'Input'))
       }
     }
