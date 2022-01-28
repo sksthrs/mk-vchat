@@ -87,8 +87,8 @@ export class PaneInput implements Pane {
   private setupRecognizer() {
     this.recognizer.ondetectunavailable = () => {
       Log.w('error', 'Speech recognition : fatal error. seems unavailable.')
-      this.hideVoiceUIs()
-      this.alertAndRecommendBrowser()
+      // this.hideVoiceUIs()
+      // this.alertAndRecommendBrowser()
     }
 
     this.recognizer.continuous = false
@@ -127,6 +127,9 @@ export class PaneInput implements Pane {
           break
         case 'not-allowed':
           this.showWarning(T.t('Maybe no mic detected', 'Input'))
+          break
+        case 'network': // Vivaldi and Chromium : ev.error.toString() === 'network'
+          this.alertAndRecommendBrowser()
           break
         default:
           this.showWarning(T.t('Error in speech recognition', 'Input'))
