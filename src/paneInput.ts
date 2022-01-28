@@ -98,7 +98,7 @@ export class PaneInput implements Pane {
     this.recognizer.onend = () => {
       Log.w('info','onend')
       if (this.isSpeechRecognising) {
-        this.showWarning(T.t('Maybe no mic detected', 'Input'))
+        this.showWarning(T.t('Speech is not detected (Getting closer to your mic may help)', 'Input'))
       }
       this.setGuiAsTyping()
     }
