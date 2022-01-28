@@ -160,9 +160,8 @@ export class SpeechRecognitionWrap {
       if (this.recognizerState === SpeechRecognitionStatus.Start 
         && `${ev.error}`.toLowerCase() === 'network') {
         this.ondetectunavailable() // Vivaldi and Chromium : ev.error.toString() === 'network'
-      } else {
-        this.generateRecognizer() // re-generate on other errors
       }
+      this.generateRecognizer() // re-generate on other errors
       this.onerror(ev)
     }
   }

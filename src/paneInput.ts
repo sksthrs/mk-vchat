@@ -95,7 +95,14 @@ export class PaneInput implements Pane {
     this.recognizer.interimResults = false
 
     this.recognizer.onstart = () => { Log.w('info','onstart') }
-    this.recognizer.onend = () => { Log.w('info','onend') }
+    this.recognizer.onend = () => {
+      Log.w('info','onend')
+      if (this.isSpeechRecognising) {
+        this.showWarning(T.t('Maybe no mic detected', 'Input'))
+      }
+      this.setGuiAsTyping()
+    }
+
     this.recognizer.onaudiostart = () => { Log.w('info','onaudiostart') }
     this.recognizer.onaudioend = () => { Log.w('info','onaudioend') }
     this.recognizer.onsoundstart = () => { Log.w('info','onsoundstart') }
@@ -133,6 +140,7 @@ export class PaneInput implements Pane {
       for (let i=0 ; i<ev.results.length ; i++) {
         phrase += ev.results[i][0].transcript
       }
+      Log.w('info', `Speech recognized: "${phrase}"`)
 
       // [for iPhone] SpeechRecognition on iPhone sometimes duplicate same phrase twice.
       if (Util.isIPhone()) {
@@ -180,14 +188,22 @@ export class PaneInput implements Pane {
 
   private setGuiAsSpeechRecognising() {
     this.isSpeechRecognising = true
-    this.voiceStartLabel.classList.add('noshow')
-    this.voiceStopLabel.classList.remove('noshow')
+    if (this.voiceStartLabel.classList.contains('noshow') === false) {
+      this.voiceStartLabel.classList.add('noshow')
+    }
+    if (this.voiceStopLabel.classList.contains('noshow') === true) {
+      this.voiceStopLabel.classList.remove('noshow')
+    }
   }
 
   private setGuiAsTyping() {
     this.isSpeechRecognising = false
-    this.voiceStartLabel.classList.remove('noshow')
-    this.voiceStopLabel.classList.add('noshow')
+    if (this.voiceStartLabel.classList.contains('noshow') === true) {
+      this.voiceStartLabel.classList.remove('noshow')
+    }
+    if (this.voiceStopLabel.classList.contains('noshow') === false) {
+      this.voiceStopLabel.classList.add('noshow')
+    }
   }
 
   private showWarning(message:string) {
